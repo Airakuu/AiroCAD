@@ -15,10 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QGraphicsView,
-    QHBoxLayout, QLabel, QMainWindow, QPushButton,
-    QRadioButton, QSizePolicy, QSpinBox, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QHBoxLayout,
+    QLabel, QMainWindow, QPushButton, QRadioButton,
+    QSizePolicy, QSpinBox, QVBoxLayout, QWidget)
+
+from cad_view import CadView
 
 class Ui_AiroCAD(object):
     def setupUi(self, AiroCAD):
@@ -132,7 +133,7 @@ class Ui_AiroCAD(object):
 
         self.horizontalLayout.addWidget(self.widgets_settings)
 
-        self.graphic = QGraphicsView(self.centralwidget)
+        self.graphic = CadView(self.centralwidget)
         self.graphic.setObjectName(u"graphic")
         self.graphic.setStyleSheet(u"background-color: rgb(255, 255, 255);")
 
