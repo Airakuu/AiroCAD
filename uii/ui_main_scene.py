@@ -32,6 +32,9 @@ class Ui_main_scene(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_line = QLabel(main_scene)
         self.label_line.setObjectName(u"label_line")
+        font = QFont()
+        font.setPointSize(15)
+        self.label_line.setFont(font)
 
         self.horizontalLayout_2.addWidget(self.label_line)
 
