@@ -1,41 +1,33 @@
 from PySide6 import QtWidgets
-from PySide6.QtWidgets import QApplication,QMainWindow
-from uii.ui_calc import Ui_MainWindow
+from PySide6.QtWidgets import QApplication, QDialog,QMainWindow,QGraphicsScene
+from uii.ui_main_scene import Ui_main_scene
 import sys
 #!pyside6-designer открытие редактора
 #!pyside6-uic name.ui -o ui_name.py преобразование
- 
+#!pyside6-uic main_scene.ui -o ui_main_scene.py
+#!Rename-Item "C:\Users\Airakuu\Desktop\GeoMod\.venv\Lib\site-packages\PySide6\translations\designer_ru.qm.bak" "designer_ru.qm" 
+#?вернуть русский язык в Qt Designer, если он пропал после обновления PySide6
 
 
 
-class Calc(QMainWindow):
+class Cad(QDialog):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_main_scene()
         self.ui.setupUi(self)
+        self.scene = QGraphicsScene(self)
+        self.ui.graphic.setScene(self.scene)
+        self.ui.graphic.scale(1, -1)
+        self.scene.setSceneRect(-400, -300, 800, 600)
 
-        self.current_number = ""
-        
-        
-        for number in range(10):
-            btn = getattr(self.ui,f"btn_{number}")
-            btn.clicked.connect(
-                lambda checked=False,d=number:self.add_number(str(d))
-            )
-        
-        
-    def add_number(self,number):
-        self.current_number += number
-        self.ui.label_result.setText(self.current_number)
-
-
-
-
-    
-    
+        for x in range(-10000, 100001, 50):
+            self.scene.addLine(x, -10000, x, 10000)
+        for y in range(-10000, 10000, 50):
+                self.scene.addLine(-10000, y, 10000, y)
+  
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
-    window = Calc()
+    window = Cad()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
