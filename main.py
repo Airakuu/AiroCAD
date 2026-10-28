@@ -72,8 +72,9 @@ class Cad(QMainWindow):
         y2 = self.ui.doubleSpinBox_y2.value() * self.pixel_per_unit
         line_pen = QPen(QColor(0, 100, 255))
         line_pen.setWidth(2)
-        line = self.scene.addLine(x1,y1,x2,y2,line_pen)
+        line = self.scene.addLine(x1, y1, x2, y2, line_pen)
         self.lines.append(line)
+
     def delete_line(self):
         if self.lines:
             dl = self.lines.pop()
