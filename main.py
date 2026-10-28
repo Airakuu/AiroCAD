@@ -16,21 +16,21 @@ class Cad(QDialog):
         super().__init__()
         self.ui = Ui_main_scene()
         self.ui.setupUi(self)
-        self.draw_grid()
-    def draw_grid(self):
         self.scene = QGraphicsScene(self)
         self.ui.graphic.setScene(self.scene)
         self.ui.graphic.scale(1, -1)
         self.scene.setSceneRect(-400, -300, 800, 600)
+        self.draw_grid()
+    def draw_grid(self):
         grid_pen=QPen(QColor(200,200,200))
-        axic_pen=QPen(QColor(0,0,0))
-        axic_pen.setWidth(2)    
+        axis_pen=QPen(QColor(0,0,0))
+        axis_pen.setWidth(2)    
         for x in range(-10000, 100001, 20):
             self.scene.addLine(x, -10000, x, 10000, grid_pen)
         for y in range(-10000, 10000, 20):
             self.scene.addLine(-10000, y, 10000, y, grid_pen)
-        self.scene.addLine(-10000,0,10000,0,axic_pen)
-        self.scene.addLine(0,-10000,0,10000,axic_pen)
+        self.scene.addLine(-10000,0,10000,0,axis_pen)
+        self.scene.addLine(0,-10000,0,10000,axis_pen)
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
