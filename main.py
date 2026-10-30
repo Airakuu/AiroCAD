@@ -17,9 +17,12 @@ class Cad(QMainWindow):
         self.ui = Ui_AiroCAD()
         self.ui.setupUi(self)
         self.lines = []
+        self.grid_items = []
         self.ui.btn_createLine.clicked.connect(self.create_line)
         self.ui.btn_deleteLine.clicked.connect(self.delete_line)
+        self.ui.spinBox_net.valueChanged.connect(self.update_grid)
         self.scene = QGraphicsScene(self)
+        self.grid_step = self.ui.spinBox_net.value()
         self.pixel_per_unit = 10  #!шаг сетки
         self.ui.graphic.setScene(self.scene)
         self.ui.graphic.scale(1, -1)
@@ -32,38 +35,48 @@ class Cad(QMainWindow):
         size_axis_number = 10
         axis_pen = QPen(QColor(0, 0, 0))
         text_color = QColor(0, 0, 0)
-        step = self.pixel_per_unit
+        step = self.pixel_per_unit*self.grid_step
         label_step = 5 * step
         axis_pen.setWidth(2)
         font = QFont("Arial", size_axis_number)
         font.setBold(True)
 
-        for x in range(-10000, 10001, step):
-            self.scene.addLine(x, -10000, x, 10000, grid_pen)
-        for y in range(-10000, 10001, step):
-            self.scene.addLine(-10000, y, 10000, y, grid_pen)
+        for x in range(-10000 // step * step, 10001, step):
+            line = self.scene.addLine(x, -10000, x, 10000, grid_pen)
+            self.grid_items.append(line)
 
-        self.scene.addLine(-10000, 0, 10000, 0, axis_pen)
-        self.scene.addLine(0, -10000, 0, 10000, axis_pen)
+        for y in range(-10000 // step * step, 10001, step):
+            line = self.scene.addLine(-10000, y, 10000, y, grid_pen)
+            self.grid_items.append(line)
 
-        for x in range(-10000, 10001, label_step):
+        axisx = self.scene.addLine(-10000, 0, 10000, 0, axis_pen)
+        self.grid_items.append(axisx)
+        axisy = self.scene.addLine(0, -10000, 0, 10000, axis_pen)
+        self.grid_items.append(axisy)
+        
+
+        for x in range(-10000 // label_step * label_step, 10001, label_step):
             if x == 0:
                 continue
-            self.scene.addLine(x, 3, x, -3, axis_pen)
-            number = self.scene.addText(str(x // step))
+            line = self.scene.addLine(x, 3, x, -3, axis_pen)
+            self.grid_items.append(line)
+            number = self.scene.addText(str(x // self.pixel_per_unit))
             number.setFont(font)
             number.setDefaultTextColor(text_color)
             number.setTransform(QTransform.fromScale(1, -1))
             number.setPos(x - number.boundingRect().width() / 2, 0)
-        for y in range(-10000, 10001, label_step):
+            self.grid_items.append(number)
+        for y in range(-10000 // label_step * label_step, 10001, label_step):
             if y == 0:
                 continue
-            self.scene.addLine(3, y, -3, y, axis_pen)
-            number = self.scene.addText(str(y // step))
+            line = self.scene.addLine(3, y, -3, y, axis_pen)
+            self.grid_items.append(line)
+            number = self.scene.addText(str(y // self.pixel_per_unit))
             number.setFont(font)
             number.setDefaultTextColor(text_color)
             number.setTransform(QTransform.fromScale(1, -1))
             number.setPos(0, y + number.boundingRect().height() / 2)
+            self.grid_items.append(number)
 
     def create_line(self):
         x1 = self.ui.doubleSpinBox_x1.value() * self.pixel_per_unit
@@ -79,6 +92,17 @@ class Cad(QMainWindow):
         if self.lines:
             dl = self.lines.pop()
             self.scene.removeItem(dl)
+    
+    def update_grid(self):
+        for item in self.grid_items:
+            self.scene.removeItem(item)
+
+        self.grid_items.clear()
+
+        self.grid_step = self.ui.spinBox_net.value()
+
+        self.draw_grid()
+        
 
 
 if __name__ == "__main__":

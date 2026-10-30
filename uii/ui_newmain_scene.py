@@ -118,6 +118,8 @@ class Ui_AiroCAD(object):
         self.spinBox_net = QSpinBox(self.widgets_settings)
         self.spinBox_net.setObjectName(u"spinBox_net")
         self.spinBox_net.setGeometry(QRect(20, 360, 78, 26))
+        self.spinBox_net.setMinimum(1)
+        self.spinBox_net.setMaximum(100)
         self.label = QLabel(self.widgets_settings)
         self.label.setObjectName(u"label")
         self.label.setGeometry(QRect(30, 100, 49, 16))
