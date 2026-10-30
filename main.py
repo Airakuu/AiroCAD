@@ -77,6 +77,18 @@ class Cad(QMainWindow):
             number.setTransform(QTransform.fromScale(1, -1))
             number.setPos(0, y + number.boundingRect().height() / 2)
             self.grid_items.append(number)
+        axis_x_text = self.scene.addText("X")
+        axis_y_text = self.scene.addText("Y")
+
+        for text in (axis_x_text, axis_y_text):
+            text.setFont(font)
+            text.setDefaultTextColor(text_color)
+            text.setTransform(QTransform.fromScale(1, -1))
+            text.setZValue(10)
+            self.grid_items.append(text)
+
+        axis_x_text.setPos(0, 0)
+        axis_y_text.setPos(-15, 17)
 
     def create_line(self):
         x1 = self.ui.doubleSpinBox_x1.value() * self.pixel_per_unit
